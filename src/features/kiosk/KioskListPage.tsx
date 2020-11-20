@@ -48,6 +48,8 @@ export const KioskListPage = () => {
   const [selectedPriceRange, setSelectedPriceRange] = useState(-1)
   const [selectedSubCategory, setSelectedSubCategory] = useState('')
 
+  navigator.geolocation.getCurrentPosition((position) => console.log(position))
+
   const fetchJsonData = async () => {
     const resp = (await jsonAxios.get('')).data
     setDataSource(resp)
