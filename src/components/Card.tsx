@@ -87,7 +87,7 @@ export const Card = ({
             </Tag>
           )}
         </div>
-        <div className="flex mt-1 text-gray-800">
+        <div className="flex font-sm flex-wrap mt-1 text-gray-800">
           {categoryName}
           <div className="mx-4 text-gray-900">|</div>
           {priceLevelJsx}
