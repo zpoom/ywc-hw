@@ -1,4 +1,5 @@
-@import 'font.css';
+/* @import 'font.css'; */
+@import url('https://cdn.lazywasabi.net/fonts/IBMPlexSansThai/IBMPlexSansThai.css');
 @import '~antd/dist/antd.css';
 @import 'tailwind.css';
 @import 'global.css'

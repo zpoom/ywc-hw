@@ -41,7 +41,7 @@ export const KioskListPage = () => {
     priceRange: [],
     merchants: [],
   })
-
+  console.log(process.env.NEXT_PUBLIC_URL)
   const [selectedCategory, setSelectedCategory] = useState('')
   const [selectedProvince, setSelectedProvince] = useState('')
 
