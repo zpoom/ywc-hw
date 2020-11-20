@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import styled from '@emotion/styled'
-import { Breadcrumb, Radio, Select } from 'antd'
+import { Breadcrumb, Input, Radio, Select } from 'antd'
 import data from '../../utils/data.json'
 import { Card } from 'components/Card'
 import { jsonAxios } from 'utils/axios'
@@ -21,10 +21,11 @@ const SearchOptionWrapper = styled.div`
 const PageContainer = styled.div`
   background: url('result-bg.png');
   min-height: 100vh;
-  background-size: contain;
+  background-size: cover;
   width: 100vw;
   /* background-repeat: no-repeat; */
-  /* background-position: center center; */
+  background-attachment: fixed;
+  background-position: center center;
 `
 
 export const KioskListPage = () => {
@@ -98,11 +99,35 @@ export const KioskListPage = () => {
       {/* <div className="h-4 bg-white">
         <img src="/halfhalf-logo.png" />
       </div> */}
+      <div className="bg-white">
+        <div
+          className="flex justify-between items-center"
+          style={{ maxWidth: '1280px', margin: '0 auto' }}
+        >
+          <div className="px-4 md:px-8 px-4 md:px-8">
+            <img src="/halfhalf-logo.png" />
+          </div>
+          <div
+            className="flex h-full ml-auto h-auto above-the-fold-input items-center rounded-lg overflow-hidden mr-4 md:mr-8"
+            style={{ flex: '1 1 0%', boxShadow: 'black 0px 0px 1px' }}
+          >
+            <div className="w-full sm:w-48 h-10 md:mt-0 hidden md:block">
+              <Select className="w-full sm:w-48 h-10 h-10 md:h-10 text-sm"></Select>
+            </div>
+            <Input />
+          </div>
+        </div>
+      </div>
       <BreadcrumbWrapper>
         <Breadcrumb>
           <Breadcrumb.Item>หน้าแรก</Breadcrumb.Item>
           <Breadcrumb.Item>ค้นหา</Breadcrumb.Item>
         </Breadcrumb>
+        {/* <div className="flex items-start">
+          <div>หน้าแรก</div>
+          <div>/</div>
+          <div>ค้นหา</div>
+        </div> */}
       </BreadcrumbWrapper>
       <div className="px-4 py-4 md:px-4 md:py-4">
         <div className="mt-8 first:mt-0 break-word text-xl font-sans font-semibold mb-4 ">
