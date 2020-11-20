@@ -1,0 +1,21 @@
+/* read docs: https://tailwindcss.com/docs/adding-base-styles */
+
+@tailwind base;
+
+/* Write your own custom base styles here */
+
+body {
+  @apply font-sans;
+}
+
+/* Start purging... */
+@tailwind components;
+/* Stop purging. */
+
+/* Write you own custom component styles here */
+
+/* Start purging... */
+@tailwind utilities;
+/* Stop purging. */
+
+/* Your own custom utilities */

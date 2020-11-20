@@ -1,0 +1,8 @@
+.ant-breadcrumb-link{
+    color: white;
+    font-size: 14px;
+}
+.ant-breadcrumb > span:last-child {
+    font-weight: 500;
+    font-family: IBM Plex Sans Thai,sans-serif;
+}
