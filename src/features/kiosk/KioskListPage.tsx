@@ -6,6 +6,7 @@ import data from '../../utils/data.json'
 import { Card } from 'components/Card'
 import { jsonAxios } from 'utils/axios'
 import { SearchOutlined } from '@ant-design/icons'
+import { insertAssetPrefix } from 'utils/const'
 
 const { Option } = Select
 
@@ -114,7 +115,10 @@ export const KioskListPage = () => {
           style={{ maxWidth: '1280px', margin: '0 auto' }}
         >
           <div className="px-4 md:px-8 px-4 md:px-8 py-2">
-            <img src="/halfhalf-logo.png" style={{ width: '80%' }} />
+            <img
+              src={insertAssetPrefix('/halfhalf-logo.png')}
+              style={{ width: '80%' }}
+            />
           </div>
           <div
             className="flex h-full ml-auto h-auto above-the-fold-input items-center rounded-lg overflow-hidden mr-4 md:mr-8"
