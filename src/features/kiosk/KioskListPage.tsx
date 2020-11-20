@@ -106,7 +106,7 @@ export const KioskListPage = () => {
         </div>
         <div className="flex items-start">
           <div
-            className="bg-white p-4 md:mr-8 md:block border rounded-sm border-gray-600"
+            className="bg-white p-4 md:mr-8 md:block border rounded-sm border-gray-600 hidden"
             style={{ width: '22rem' }}
           >
             <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">

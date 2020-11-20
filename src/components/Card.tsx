@@ -22,6 +22,13 @@ const ShopDivider = styled.div`
   margin: 18px 0px;
 `
 
+const ShopImageWrapper = styled.div`
+  padding: 5px;
+  @media (min-width: 1024px) {
+    width: 250px;
+  }
+`
+
 interface CardProps {
   shopName: string
   thumbnail?: string
@@ -64,12 +71,14 @@ export const Card = ({
   }
 
   return (
-    <div className="grid grid-cols-4 border border-gray-500 p-2 gap-4 bg-white">
-      <ShopImage
-        className="col-span-1"
-        style={{ background: `url(${thumbnail})` }}
-      />
-      <div className="col-span-3 py-4">
+    <div className="border border-gray-500 bg-white lg:flex blog">
+      <ShopImageWrapper>
+        <ShopImage
+          style={{ background: `url(${thumbnail})` }}
+          className="w-full h-full"
+        />
+      </ShopImageWrapper>
+      <div className="flex-1 p-4">
         <div className="flex items-center">
           <div className="text-xl font-semibold">{shopName}</div>
           {isOpen === 'Y' && (
