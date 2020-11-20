@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import styled from '@emotion/styled'
-import { Input, Radio, Select, Drawer, AutoComplete } from 'antd'
+import {
+  Input,
+  Radio,
+  Select,
+  Drawer,
+  AutoComplete,
+  InputNumber,
+  Button,
+} from 'antd'
 import data from '../../utils/data.json'
 import { Card } from 'components/Card'
 import { jsonAxios } from 'utils/axios'
@@ -154,6 +162,7 @@ export const KioskListPage = () => {
                 onChange={handleSelectProvince}
                 bordered={false}
                 size="large"
+                value={selectedProvince}
               >
                 <Option value="พื้นที่ใกล้ฉัน">พื้นที่ใกล้ฉัน</Option>
                 <Option value="">สถานที่ทั้งหมด</Option>
@@ -238,7 +247,11 @@ export const KioskListPage = () => {
               <div className="mt-6 first:mt-0 break-word text-base font-sans font-semibold text-black">
                 จังหวัด/ใกล้ฉัน
               </div>
-              <Select className="mt-2 w-full" onChange={handleSelectProvince}>
+              <Select
+                className="mt-2 w-full"
+                onChange={handleSelectProvince}
+                value={selectedProvince}
+              >
                 <Option value="พื้นที่ใกล้ฉัน">พื้นที่ใกล้ฉัน</Option>
                 <Option value="">สถานที่ทั้งหมด</Option>
                 {provinces.map((province) => (
@@ -247,17 +260,62 @@ export const KioskListPage = () => {
                   </Option>
                 ))}
               </Select>
-              <div className="mt-6 first:mt-0 break-word text-base font-sans font-semibold text-black">
-                ราคา
-              </div>
-              <Select className="mt-2 w-full" onChange={handleSelectPriceRange}>
-                <Option value={-1}>ทั้งหมด</Option>
-                {priceRanges.map((priceRange, idx) => (
-                  <Option value={idx + 1} key={priceRange}>
-                    {priceRange}
-                  </Option>
-                ))}
-              </Select>
+              {selectedCategory === 'ร้านอาหารและเครื่องดื่ม' ? (
+                <>
+                  <div className="mt-6 first:mt-0 break-word text-base font-sans font-semibold text-black">
+                    ราคา
+                  </div>
+                  <Select
+                    className="mt-2 w-full"
+                    onChange={handleSelectPriceRange}
+                  >
+                    <Option value={-1}>ทั้งหมด</Option>
+                    {priceRanges.map((priceRange, idx) => (
+                      <Option value={idx + 1} key={priceRange}>
+                        {priceRange}
+                      </Option>
+                    ))}
+                  </Select>
+                </>
+              ) : (
+                <>
+                  <div className="mt-6 first:mt-0 break-word text-base font-sans font-semibold text-black">
+                    ช่วงราคาสินค้า (บาท)
+                  </div>
+                  <Input.Group
+                    size="small"
+                    className="flex items-center justify-around"
+                  >
+                    <InputNumber
+                      className="mt-2"
+                      style={{ flex: '1 1 0%', textAlign: 'center' }}
+                      placeholder="ราคาต่ำสุด"
+                    />
+                    <div className="mx-2" style={{ borderRight: '0px' }}>
+                      -
+                    </div>
+                    <InputNumber
+                      className="mt-2 "
+                      style={{ flex: '1 1 0%', textAlign: 'center' }}
+                      placeholder="ราคาสูงสุด"
+                    />
+                  </Input.Group>
+                  <Button block className="mt-2" type="default">
+                    ตกลง
+                  </Button>
+                  {/* <Select
+                    className="mt-2 w-full"
+                    onChange={handleSelectPriceRange}
+                  >
+                    <Option value={-1}>ทั้งหมด</Option>
+                    {priceRanges.map((priceRange, idx) => (
+                      <Option value={idx + 1} key={priceRange}>
+                        {priceRange}
+                      </Option>
+                    ))}
+                  </Select> */}
+                </>
+              )}
               {subCategories.length > 0 && (
                 <>
                   <div className="mt-6 first:mt-0 break-word text-base font-sans font-semibold text-black">
