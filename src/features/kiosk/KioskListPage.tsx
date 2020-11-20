@@ -60,10 +60,24 @@ export const KioskListPage = () => {
     setPriceRanges(resp.priceRange)
     setMerchants(resp.merchants)
   }
+  const handleSelectCategory = (value) => {
+    setSelectedSubCategory('')
+    const cat = value
+    setSelectedCategory(cat)
+
+    if (cat === '') {
+      setSubCategories([])
+    }
+
+    const subCats =
+      dataSource.categories.find((category) => category.name === cat)
+        ?.subcategories || []
+    setSubCategories(subCats)
+  }
 
   const handleChangeCategory = (event) => {
-    const cat = event.target.value
-    console.log()
+    setSelectedSubCategory('')
+    const cat = event?.target?.value
     setSelectedCategory(cat)
 
     if (cat === '') {
@@ -142,7 +156,7 @@ export const KioskListPage = () => {
               <Select
                 className="w-full md:mt-0 h-full text-sm md:text-sm"
                 suffixIcon={<SearchOutlined />}
-                showSearch
+                // showSearch
                 style={{
                   border: '0px',
                   paddingRight: '0px',
@@ -152,7 +166,8 @@ export const KioskListPage = () => {
                   verticalAlign: 'middle',
                   borderRadius: '0px',
                 }}
-                optionFilterProp="children"
+                // optionFilterProp="children"
+                onChange={handleSelectCategory}
               >
                 {categories.map((c) => (
                   <Option value={c.name} key={`select_cat_${c.name}`}>
