@@ -25,6 +25,6 @@ module.exports = {
     return config
   },
 
-  basePath: '/ywc-hw',
-  assetPrefix: '/ywc-hw',
+  basePath: process.env.NEXT_PUBLIC_BASE_URL,
+  assetPrefix: process.env.NEXT_PUBLIC_BASE_URL,
 }
