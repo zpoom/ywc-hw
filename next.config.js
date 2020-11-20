@@ -25,6 +25,12 @@ module.exports = {
     return config
   },
 
-  basePath: process.env.NEXT_PUBLIC_BASE_URL,
-  assetPrefix: process.env.NEXT_PUBLIC_BASE_URL,
+  basePath:
+    process.env.NODE_ENV === 'production'
+      ? '/ywc-hw'
+      : process.env.NEXT_PUBLIC_BASE_URL,
+  assetPrefix:
+    process.env.NODE_ENV === 'production'
+      ? '/ywc-hw'
+      : process.env.NEXT_PUBLIC_BASE_URL,
 }
