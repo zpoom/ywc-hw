@@ -14,6 +14,10 @@ const BreadcrumbWrapper = styled.div`
   padding: 0.75rem;
 `
 
+const SearchOptionWrapper = styled.div`
+  min-width: 22rem !important;
+`
+
 const PageContainer = styled.div`
   background: url('result-bg.png');
   min-height: 100vh;
@@ -105,76 +109,78 @@ export const KioskListPage = () => {
           {`ผลการค้นหา ${selectedCategory} ทั้งหมด`}
         </div>
         <div className="flex items-start">
-          <div
-            className="bg-white p-4 md:mr-8 md:block border rounded-sm border-gray-600 hidden"
-            style={{ width: '22rem' }}
-          >
-            <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
-              ประเภทร้านค้า
-            </div>
-            <Radio.Group
-              className="mt-2"
-              onChange={handleChangeCategory}
-              value={selectedCategory}
-            >
-              <Radio style={{ display: 'block', height: '32px' }} value="">
-                ทั้งหมด
-              </Radio>
-              {categories.map((c) => (
-                <Radio
-                  key={`cat${c.name}`}
-                  style={{ display: 'block', height: '32px' }}
-                  value={c.name}
-                >
-                  {c.name}
+          <SearchOptionWrapper className="md:mr-8 md:block border rounded-sm border-gray-600 hidden relative md:relative">
+            <div className="bg-white p-4 w-full">
+              <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
+                ประเภทร้านค้า
+              </div>
+              <Radio.Group
+                className="mt-2"
+                onChange={handleChangeCategory}
+                value={selectedCategory}
+              >
+                <Radio style={{ display: 'block', height: '32px' }} value="">
+                  ทั้งหมด
                 </Radio>
-              ))}
-            </Radio.Group>
-            <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
-              จังหวัด/ใกล้ฉัน
-            </div>
-            <Select className="w-full" onChange={handleSelectProvince}>
-              <Option value="พื้นที่ใกล้ฉัน">พื้นที่ใกล้ฉัน</Option>
-              <Option value="">สถานที่ทั้งหมด</Option>
-              {provinces.map((province) => (
-                <Option value={province} key={province}>
-                  {province}
-                </Option>
-              ))}
-            </Select>
-            <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
-              ราคา
-            </div>
-            <Select className="w-full">
-              <Option value="">ทั้งหมด</Option>
-              {priceRanges.map((priceRange) => (
-                <Option value={priceRange} key={priceRange}>
-                  {priceRange}
-                </Option>
-              ))}
-            </Select>
-            <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
-              ประเภทอาหารและเครื่องดื่ม
-            </div>
-            <Radio.Group className="mt-2" onChange={handleChangeSubCategory}>
-              {subCategories.length > 0 && (
-                <>
-                  <Radio style={{ display: 'block', height: '32px' }} value="">
-                    ทั้งหมด
+                {categories.map((c) => (
+                  <Radio
+                    key={`cat${c.name}`}
+                    style={{ display: 'block', height: '32px' }}
+                    value={c.name}
+                  >
+                    {c.name}
                   </Radio>
-                  {subCategories.map((subCat: string, idx: number) => (
+                ))}
+              </Radio.Group>
+              <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
+                จังหวัด/ใกล้ฉัน
+              </div>
+              <Select className="w-full" onChange={handleSelectProvince}>
+                <Option value="พื้นที่ใกล้ฉัน">พื้นที่ใกล้ฉัน</Option>
+                <Option value="">สถานที่ทั้งหมด</Option>
+                {provinces.map((province) => (
+                  <Option value={province} key={province}>
+                    {province}
+                  </Option>
+                ))}
+              </Select>
+              <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
+                ราคา
+              </div>
+              <Select className="w-full">
+                <Option value="">ทั้งหมด</Option>
+                {priceRanges.map((priceRange) => (
+                  <Option value={priceRange} key={priceRange}>
+                    {priceRange}
+                  </Option>
+                ))}
+              </Select>
+              <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
+                ประเภทอาหารและเครื่องดื่ม
+              </div>
+              <Radio.Group className="mt-2" onChange={handleChangeSubCategory}>
+                {subCategories.length > 0 && (
+                  <>
                     <Radio
-                      key={idx}
                       style={{ display: 'block', height: '32px' }}
-                      value={subCat}
+                      value=""
                     >
-                      {subCat}
+                      ทั้งหมด
                     </Radio>
-                  ))}
-                </>
-              )}
-            </Radio.Group>
-          </div>
+                    {subCategories.map((subCat: string, idx: number) => (
+                      <Radio
+                        key={idx}
+                        style={{ display: 'block', height: '32px' }}
+                        value={subCat}
+                      >
+                        {subCat}
+                      </Radio>
+                    ))}
+                  </>
+                )}
+              </Radio.Group>
+            </div>
+          </SearchOptionWrapper>
           <div className="w-full">
             <div className="grid grid-cols-1 gap-2">
               {merchants.map((merchant, idx) => (
