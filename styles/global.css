@@ -8,6 +8,13 @@
     font-family: IBM Plex Sans Thai,sans-serif;
 }
 
-.above-the-fold-input .ant-select-selection-search-input, .above-the-fold-input .ant-select-selector {
+/* .above-the-fold-input .ant-select-selection-search-input, .above-the-fold-input .ant-select-selector  {
     height: 100%!important;
 }
+.above-the-fold-input, .ant-select-selector {
+    border-radius: 0!important;
+    border: 0!important;
+}
+.ant-input:placeholder-shown {
+    text-overflow: ellipsis;
+} */

@@ -3,7 +3,6 @@ import { Tag } from 'antd'
 import React, { useEffect, useState } from 'react'
 
 const ShopImage = styled.div`
-  /* background: url('https://images.unsplash.com/photo-1597227772909-a6d166b48b79?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80'); */
   background-size: cover !important;
   background-repeat: no-repeat;
   background-position: center center;
