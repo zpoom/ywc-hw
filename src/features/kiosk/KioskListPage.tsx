@@ -48,7 +48,7 @@ export const KioskListPage = () => {
   const [selectedProvince, setSelectedProvince] = useState('')
   const [selectedPriceRange, setSelectedPriceRange] = useState(-1)
   const [selectedSubCategory, setSelectedSubCategory] = useState('')
-  const [openDrawer, setOpenDrawer] = useState(true)
+  const [openDrawer, setOpenDrawer] = useState(false)
 
   // navigator.geolocation.getCurrentPosition((position) => console.log(position))
 
