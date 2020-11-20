@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import styled from '@emotion/styled'
-import { Breadcrumb, Input, Radio, Select } from 'antd'
+import { Breadcrumb, Input, Radio, Select, Drawer } from 'antd'
 import data from '../../utils/data.json'
 import { Card } from 'components/Card'
 import { jsonAxios } from 'utils/axios'
-import { SearchOutlined } from '@ant-design/icons'
+import { SearchOutlined, LeftOutlined } from '@ant-design/icons'
 import { insertAssetPrefix } from 'utils/const'
 
 const { Option } = Select
@@ -28,6 +28,7 @@ const PageContainer = styled.div`
   /* background-repeat: no-repeat; */
   background-attachment: fixed;
   background-position: center center;
+  padding-bottom: 4rem;
 `
 
 export const KioskListPage = () => {
@@ -47,8 +48,9 @@ export const KioskListPage = () => {
   const [selectedProvince, setSelectedProvince] = useState('')
   const [selectedPriceRange, setSelectedPriceRange] = useState(-1)
   const [selectedSubCategory, setSelectedSubCategory] = useState('')
+  const [openDrawer, setOpenDrawer] = useState(true)
 
-  navigator.geolocation.getCurrentPosition((position) => console.log(position))
+  // navigator.geolocation.getCurrentPosition((position) => console.log(position))
 
   const fetchJsonData = async () => {
     const resp = (await jsonAxios.get('')).data
@@ -122,6 +124,81 @@ export const KioskListPage = () => {
   useEffect(() => {
     fetchJsonData()
   }, [])
+  const x = (
+    <SearchOptionWrapper className="md:mr-8 md:block border rounded-sm border-gray-600 hidden relative md:relative">
+      <div className="bg-white p-4 w-full">
+        <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
+          ประเภทร้านค้า
+        </div>
+        <Radio.Group
+          className="mt-2"
+          onChange={handleChangeCategory}
+          value={selectedCategory}
+        >
+          <Radio style={{ display: 'block', height: '32px' }} value="">
+            ทั้งหมด
+          </Radio>
+          {categories.map((c) => (
+            <Radio
+              key={`cat${c.name}`}
+              style={{ display: 'block', height: '32px' }}
+              value={c.name}
+            >
+              {c.name}
+            </Radio>
+          ))}
+        </Radio.Group>
+        <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
+          จังหวัด/ใกล้ฉัน
+        </div>
+        <Select className="w-full" onChange={handleSelectProvince}>
+          <Option value="พื้นที่ใกล้ฉัน">พื้นที่ใกล้ฉัน</Option>
+          <Option value="">สถานที่ทั้งหมด</Option>
+          {provinces.map((province) => (
+            <Option value={province} key={province}>
+              {province}
+            </Option>
+          ))}
+        </Select>
+        <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
+          ราคา
+        </div>
+        <Select className="w-full" onChange={handleSelectPriceRange}>
+          <Option value={-1}>ทั้งหมด</Option>
+          {priceRanges.map((priceRange, idx) => (
+            <Option value={idx + 1} key={priceRange}>
+              {priceRange}
+            </Option>
+          ))}
+        </Select>
+        <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
+          ประเภทอาหารและเครื่องดื่ม
+        </div>
+        <Radio.Group
+          className="mt-2"
+          onChange={handleChangeSubCategory}
+          value={selectedSubCategory}
+        >
+          {subCategories.length > 0 && (
+            <>
+              <Radio style={{ display: 'block', height: '32px' }} value="">
+                ทั้งหมด
+              </Radio>
+              {subCategories.map((subCat: string, idx: number) => (
+                <Radio
+                  key={idx}
+                  style={{ display: 'block', height: '32px' }}
+                  value={subCat}
+                >
+                  {subCat}
+                </Radio>
+              ))}
+            </>
+          )}
+        </Radio.Group>
+      </div>
+    </SearchOptionWrapper>
+  )
 
   return (
     <PageContainer>
@@ -134,6 +211,12 @@ export const KioskListPage = () => {
             <img
               src={insertAssetPrefix('/halfhalf-logo.png')}
               style={{ width: '80%' }}
+              className="hidden md:block"
+            />
+            <img
+              src={insertAssetPrefix('/halfhalf-logo-mini.png')}
+              style={{ width: '80%' }}
+              className="block md:hidden"
             />
           </div>
           <div
@@ -179,6 +262,11 @@ export const KioskListPage = () => {
               </Select>
             </div>
           </div>
+          <img
+            src={insertAssetPrefix('filter.png')}
+            className="md:hidden mr-4 cursor-pointer"
+            onClick={() => setOpenDrawer(true)}
+          />
         </div>
       </div>
       <BreadcrumbWrapper>
@@ -246,34 +334,38 @@ export const KioskListPage = () => {
                   </Option>
                 ))}
               </Select>
-              <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
-                ประเภทอาหารและเครื่องดื่ม
-              </div>
-              <Radio.Group
-                className="mt-2"
-                onChange={handleChangeSubCategory}
-                value={selectedSubCategory}
-              >
-                {subCategories.length > 0 && (
-                  <>
-                    <Radio
-                      style={{ display: 'block', height: '32px' }}
-                      value=""
-                    >
-                      ทั้งหมด
-                    </Radio>
-                    {subCategories.map((subCat: string, idx: number) => (
-                      <Radio
-                        key={idx}
-                        style={{ display: 'block', height: '32px' }}
-                        value={subCat}
-                      >
-                        {subCat}
-                      </Radio>
-                    ))}
-                  </>
-                )}
-              </Radio.Group>
+              {subCategories.length > 0 && (
+                <>
+                  <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
+                    ประเภทอาหารและเครื่องดื่ม
+                  </div>
+                  <Radio.Group
+                    className="mt-2"
+                    onChange={handleChangeSubCategory}
+                    value={selectedSubCategory}
+                  >
+                    {subCategories.length > 0 && (
+                      <>
+                        <Radio
+                          style={{ display: 'block', height: '32px' }}
+                          value=""
+                        >
+                          ทั้งหมด
+                        </Radio>
+                        {subCategories.map((subCat: string, idx: number) => (
+                          <Radio
+                            key={idx}
+                            style={{ display: 'block', height: '32px' }}
+                            value={subCat}
+                          >
+                            {subCat}
+                          </Radio>
+                        ))}
+                      </>
+                    )}
+                  </Radio.Group>
+                </>
+              )}
             </div>
           </SearchOptionWrapper>
           <div className="w-full">
@@ -297,6 +389,90 @@ export const KioskListPage = () => {
           </div>
         </div>
       </div>
+      <Drawer
+        visible={openDrawer}
+        onClose={() => setOpenDrawer(false)}
+        closable={false}
+        bodyStyle={{ padding: '0' }}
+      >
+        <div className="text-2xl  w-full h-16 bg-blue-900 text-white flex justify-center items-center relative">
+          <div className="absolute left-0 top-auto ml-4">
+            <LeftOutlined onClick={() => setOpenDrawer(false)} />
+          </div>{' '}
+          กรอกผล
+        </div>
+        <div className="bg-white p-4 w-full">
+          <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
+            ประเภทร้านค้า
+          </div>
+          <Radio.Group
+            className="mt-2"
+            onChange={handleChangeCategory}
+            value={selectedCategory}
+          >
+            <Radio style={{ display: 'block', height: '32px' }} value="">
+              ทั้งหมด
+            </Radio>
+            {categories.map((c) => (
+              <Radio
+                key={`cat${c.name}`}
+                style={{ display: 'block', height: '32px' }}
+                value={c.name}
+              >
+                {c.name}
+              </Radio>
+            ))}
+          </Radio.Group>
+          <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
+            จังหวัด/ใกล้ฉัน
+          </div>
+          <Select className="w-full" onChange={handleSelectProvince}>
+            <Option value="พื้นที่ใกล้ฉัน">พื้นที่ใกล้ฉัน</Option>
+            <Option value="">สถานที่ทั้งหมด</Option>
+            {provinces.map((province) => (
+              <Option value={province} key={province}>
+                {province}
+              </Option>
+            ))}
+          </Select>
+          <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
+            ราคา
+          </div>
+          <Select className="w-full" onChange={handleSelectPriceRange}>
+            <Option value={-1}>ทั้งหมด</Option>
+            {priceRanges.map((priceRange, idx) => (
+              <Option value={idx + 1} key={priceRange}>
+                {priceRange}
+              </Option>
+            ))}
+          </Select>
+          {subCategories.length > 0 && (
+            <>
+              <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
+                ประเภทอาหารและเครื่องดื่ม
+              </div>
+              <Radio.Group
+                className="mt-2"
+                onChange={handleChangeSubCategory}
+                value={selectedSubCategory}
+              >
+                <Radio style={{ display: 'block', height: '32px' }} value="">
+                  ทั้งหมด
+                </Radio>
+                {subCategories.map((subCat: string, idx: number) => (
+                  <Radio
+                    key={idx}
+                    style={{ display: 'block', height: '32px' }}
+                    value={subCat}
+                  >
+                    {subCat}
+                  </Radio>
+                ))}
+              </Radio.Group>
+            </>
+          )}
+        </div>
+      </Drawer>
     </PageContainer>
   )
 }

@@ -1,6 +1,8 @@
 import styled from '@emotion/styled'
-import { Tag } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { Tag, Tooltip } from 'antd'
+import React from 'react'
+import parse from 'html-react-parser'
+import { insertAssetPrefix } from 'utils/const'
 
 const ShopImage = styled.div`
   background-size: cover !important;
@@ -25,6 +27,18 @@ const ShopImageWrapper = styled.div`
   padding: 5px;
   @media (min-width: 1024px) {
     width: 250px;
+  }
+`
+
+const ShopFacilityIconContainer = styled.div`
+  margin-right: 6px;
+  margin-bottom: 3px;
+  padding: 5px;
+  border-radius: 20px;
+  border: 1px solid rgb(108, 191, 95);
+  img {
+    height: 1.1rem;
+    width: 1.1rem;
   }
 `
 
@@ -70,7 +84,7 @@ export const Card = ({
   }
 
   return (
-    <div className="border border-gray-500 bg-white lg:flex blog">
+    <div className="border border-gray-500 bg-white lg:flex blog cursor-pointer">
       <ShopImageWrapper>
         <ShopImage
           style={{ background: `url(${thumbnail})` }}
@@ -94,6 +108,22 @@ export const Card = ({
           {`${addressDistrictName} ${addressProvinceName}`}
         </div>
         <ShopDivider />
+        <div className="flex font-base mb-2 text-gray-800">
+          {parse(highlightText, { trim: false })}
+        </div>
+        <div className="flex font-base flex-wrap items-center mb-2">
+          <div className="mr-2 font-semibold">เมนูแนะนำ:</div>
+          <div className="mr-1">{recommendedItems.join(',')}</div>
+        </div>
+        <div className="flex font-base flex-wrap mb-4 mt-4">
+          {facilities.map((facility, idx) => (
+            <Tooltip title={facility} key={`fac_${facility}_${idx}`}>
+              <ShopFacilityIconContainer>
+                <img src={insertAssetPrefix(`${facility}.png`)} />
+              </ShopFacilityIconContainer>
+            </Tooltip>
+          ))}
+        </div>
       </div>
     </div>
   )

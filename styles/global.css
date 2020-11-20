@@ -18,3 +18,7 @@
 .ant-input:placeholder-shown {
     text-overflow: ellipsis;
 } */
+
+.ant-drawer-content-wrapper{
+    width: 100vw !important;
+}
