@@ -268,6 +268,7 @@ export const KioskListPage = () => {
                   <Select
                     className="mt-2 w-full"
                     onChange={handleSelectPriceRange}
+                    value={selectedPriceRange}
                   >
                     <Option value={-1}>ทั้งหมด</Option>
                     {priceRanges.map((priceRange, idx) => (
