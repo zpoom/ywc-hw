@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import styled from '@emotion/styled'
-import { Breadcrumb, Input, Radio, Select, Drawer } from 'antd'
+import { Input, Radio, Select, Drawer, AutoComplete } from 'antd'
 import data from '../../utils/data.json'
 import { Card } from 'components/Card'
 import { jsonAxios } from 'utils/axios'
@@ -124,81 +124,6 @@ export const KioskListPage = () => {
   useEffect(() => {
     fetchJsonData()
   }, [])
-  const x = (
-    <SearchOptionWrapper className="md:mr-8 md:block border rounded-sm border-gray-600 hidden relative md:relative">
-      <div className="bg-white p-4 w-full">
-        <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
-          ประเภทร้านค้า
-        </div>
-        <Radio.Group
-          className="mt-2"
-          onChange={handleChangeCategory}
-          value={selectedCategory}
-        >
-          <Radio style={{ display: 'block', height: '32px' }} value="">
-            ทั้งหมด
-          </Radio>
-          {categories.map((c) => (
-            <Radio
-              key={`cat${c.name}`}
-              style={{ display: 'block', height: '32px' }}
-              value={c.name}
-            >
-              {c.name}
-            </Radio>
-          ))}
-        </Radio.Group>
-        <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
-          จังหวัด/ใกล้ฉัน
-        </div>
-        <Select className="w-full" onChange={handleSelectProvince}>
-          <Option value="พื้นที่ใกล้ฉัน">พื้นที่ใกล้ฉัน</Option>
-          <Option value="">สถานที่ทั้งหมด</Option>
-          {provinces.map((province) => (
-            <Option value={province} key={province}>
-              {province}
-            </Option>
-          ))}
-        </Select>
-        <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
-          ราคา
-        </div>
-        <Select className="w-full" onChange={handleSelectPriceRange}>
-          <Option value={-1}>ทั้งหมด</Option>
-          {priceRanges.map((priceRange, idx) => (
-            <Option value={idx + 1} key={priceRange}>
-              {priceRange}
-            </Option>
-          ))}
-        </Select>
-        <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
-          ประเภทอาหารและเครื่องดื่ม
-        </div>
-        <Radio.Group
-          className="mt-2"
-          onChange={handleChangeSubCategory}
-          value={selectedSubCategory}
-        >
-          {subCategories.length > 0 && (
-            <>
-              <Radio style={{ display: 'block', height: '32px' }} value="">
-                ทั้งหมด
-              </Radio>
-              {subCategories.map((subCat: string, idx: number) => (
-                <Radio
-                  key={idx}
-                  style={{ display: 'block', height: '32px' }}
-                  value={subCat}
-                >
-                  {subCat}
-                </Radio>
-              ))}
-            </>
-          )}
-        </Radio.Group>
-      </div>
-    </SearchOptionWrapper>
-  )
 
   return (
     <PageContainer>
@@ -227,6 +152,8 @@ export const KioskListPage = () => {
               <Select
                 className="w-full sm:w-48 h-10 h-10 md:h-10 text-sm"
                 onChange={handleSelectProvince}
+                bordered={false}
+                size="large"
               >
                 <Option value="พื้นที่ใกล้ฉัน">พื้นที่ใกล้ฉัน</Option>
                 <Option value="">สถานที่ทั้งหมด</Option>
@@ -238,28 +165,21 @@ export const KioskListPage = () => {
               </Select>
             </div>
             <div className="w-full sm:w-84 flex-1 h-10 md:border-l">
-              <Select
-                className="w-full md:mt-0 h-full text-sm md:text-sm"
-                suffixIcon={<SearchOutlined />}
-                // showSearch
-                style={{
-                  border: '0px',
-                  paddingRight: '0px',
-                  paddingTop: '0px',
-                  paddingBottom: '0px',
-                  overflow: 'hidden',
-                  verticalAlign: 'middle',
-                  borderRadius: '0px',
-                }}
-                // optionFilterProp="children"
-                onChange={handleSelectCategory}
-              >
-                {categories.map((c) => (
-                  <Option value={c.name} key={`select_cat_${c.name}`}>
-                    {c.name}
-                  </Option>
-                ))}
-              </Select>
+              <div className="w-full flex items-center h-full space-between">
+                <AutoComplete
+                  placeholder="ค้นหา ชื่อ ร้านอาหาร และเครื่องดื่ม ร้านธงฟ้า ร้านค้า OTOP และสินค้าทั่วไป"
+                  size="large"
+                  options={[{ value: 'text 1' }, { value: 'text 2' }]}
+                  style={{ width: '100%' }}
+                  bordered={false}
+                />
+                <div
+                  className="flex h-full items-center px-6 relative"
+                  style={{ backgroundColor: '#f8f8f8', right: '0' }}
+                >
+                  <SearchOutlined />{' '}
+                </div>
+              </div>
             </div>
           </div>
           <img
@@ -279,13 +199,17 @@ export const KioskListPage = () => {
           </div>
           <div className="text-gray-300 mx-3">/</div>
           <div className="text-white whitespace-no-wrap null pr-8">
-            <div className="font-semibold"> ค้นหา</div>
+            <div className="font-semibold">ค้นหา</div>
           </div>
         </div>
       </BreadcrumbWrapper>
       <div className="px-4 py-4 md:px-4 md:py-4">
         <div className="mt-8 first:mt-0 break-word text-xl font-sans font-semibold mb-4 ">
-          {`ผลการค้นหา ${selectedCategory} ทั้งหมด`}
+          {`ผลการค้นหา ${selectedCategory} ${
+            selectedPriceRange === -1
+              ? ''
+              : `, ราคา ${priceRanges[selectedPriceRange - 1]}`
+          } ทั้งหมด`}
         </div>
         <div className="flex items-start">
           <SearchOptionWrapper className="md:mr-8 md:block border rounded-sm border-gray-600 hidden relative md:relative">
@@ -294,7 +218,7 @@ export const KioskListPage = () => {
                 ประเภทร้านค้า
               </div>
               <Radio.Group
-                className="mt-2"
+                className="mt-4"
                 onChange={handleChangeCategory}
                 value={selectedCategory}
               >
@@ -311,10 +235,10 @@ export const KioskListPage = () => {
                   </Radio>
                 ))}
               </Radio.Group>
-              <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
+              <div className="mt-6 first:mt-0 break-word text-base font-sans font-semibold text-black">
                 จังหวัด/ใกล้ฉัน
               </div>
-              <Select className="w-full" onChange={handleSelectProvince}>
+              <Select className="mt-2 w-full" onChange={handleSelectProvince}>
                 <Option value="พื้นที่ใกล้ฉัน">พื้นที่ใกล้ฉัน</Option>
                 <Option value="">สถานที่ทั้งหมด</Option>
                 {provinces.map((province) => (
@@ -323,10 +247,10 @@ export const KioskListPage = () => {
                   </Option>
                 ))}
               </Select>
-              <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
+              <div className="mt-6 first:mt-0 break-word text-base font-sans font-semibold text-black">
                 ราคา
               </div>
-              <Select className="w-full" onChange={handleSelectPriceRange}>
+              <Select className="mt-2 w-full" onChange={handleSelectPriceRange}>
                 <Option value={-1}>ทั้งหมด</Option>
                 {priceRanges.map((priceRange, idx) => (
                   <Option value={idx + 1} key={priceRange}>
@@ -336,7 +260,7 @@ export const KioskListPage = () => {
               </Select>
               {subCategories.length > 0 && (
                 <>
-                  <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
+                  <div className="mt-6 first:mt-0 break-word text-base font-sans font-semibold text-black">
                     ประเภทอาหารและเครื่องดื่ม
                   </div>
                   <Radio.Group

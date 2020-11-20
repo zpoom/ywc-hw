@@ -18,7 +18,11 @@
 .ant-input:placeholder-shown {
     text-overflow: ellipsis;
 } */
-
+.ant-input-suffix {
+    display: flex;
+    flex: none;
+    align-items: center;
+}
 .ant-drawer-content-wrapper{
     width: 100vw !important;
 }
