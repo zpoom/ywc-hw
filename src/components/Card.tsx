@@ -99,6 +99,11 @@ export const Card = ({
               เปิดอยู่
             </Tag>
           )}
+          {isOpen === 'N' && (
+            <Tag className="ml-4" color="#A1A1A1">
+              ปิดอยู่
+            </Tag>
+          )}
         </div>
         <div className="flex font-sm flex-wrap mt-1 text-gray-800">
           {categoryName}
