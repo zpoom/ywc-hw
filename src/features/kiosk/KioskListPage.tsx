@@ -60,8 +60,6 @@ export const KioskListPage = () => {
   const [searchKeyword, setSearchKeyword] = useState('')
   const [openDrawer, setOpenDrawer] = useState(false)
 
-  // navigator.geolocation.getCurrentPosition((position) => console.log(position))
-
   const fetchJsonData = async () => {
     const resp = (await jsonAxios.get('')).data
     setDataSource(resp)
@@ -76,7 +74,6 @@ export const KioskListPage = () => {
   }
   const handleSelectCategory = (value) => {
     setSelectedSubCategory('')
-    console.log('select', value)
     const cat = value
     setSelectedCategory(cat)
 
@@ -121,7 +118,6 @@ export const KioskListPage = () => {
   }
 
   const handleSearch = (value) => {
-    console.log('search', value)
     if (value !== '') {
       setSelectedCategory('')
       setSelectedSubCategory('')
