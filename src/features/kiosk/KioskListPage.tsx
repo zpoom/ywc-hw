@@ -123,6 +123,10 @@ export const KioskListPage = () => {
   const handleSearch = (value) => {
     console.log('search', value)
     if (value !== '') {
+      setSelectedCategory('')
+      setSelectedSubCategory('')
+      setSelectedPriceRange('')
+      setSelectedPriceRange(-1)
       setSearchKeyword(value)
       const fuse = new Fuse(dataSource.merchants, {
         keys: ['shopNameTH'],
@@ -137,12 +141,12 @@ export const KioskListPage = () => {
       dataSource.merchants.filter(
         (d) =>
           (selectedCategory === '' ||
-            selectedCategory.includes(d.categoryName) ||
-            selectedSubCategory === '' ||
-            selectedSubCategory === d.subcategoryName) &&
+            selectedCategory.includes(d.categoryName)) &&
           (selectedProvince === '' ||
             selectedProvince.includes(d.addressProvinceName)) &&
-          (selectedPriceRange === -1 || selectedPriceRange === d.priceLevel),
+          (selectedPriceRange === -1 || selectedPriceRange === d.priceLevel) &&
+          (selectedSubCategory === '' ||
+            selectedSubCategory === d.subcategoryName),
       ),
     )
   }, [selectedCategory, selectedProvince, selectedPriceRange])
