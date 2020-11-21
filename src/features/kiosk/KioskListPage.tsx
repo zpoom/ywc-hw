@@ -194,7 +194,6 @@ export const KioskListPage = () => {
             <div className="w-full sm:w-84 flex-1 h-10 md:border-l">
               <div className="w-full flex items-center h-full space-between">
                 <AutoComplete
-                  placeholder="ค้นหา ชื่อ ร้านอาหาร และเครื่องดื่ม ร้านธงฟ้า ร้านค้า OTOP และสินค้าทั่วไป"
                   size="large"
                   options={categories.map((cat) => ({ value: cat.name }))}
                   style={{ width: '100%' }}
@@ -205,6 +204,7 @@ export const KioskListPage = () => {
                 >
                   <Input
                     size="large"
+                    placeholder="ค้นหา ชื่อ ร้านอาหาร และเครื่องดื่ม ร้านธงฟ้า ร้านค้า OTOP และสินค้าทั่วไป"
                     suffix={
                       <div className="flex h-full items-center px-6">
                         <SearchOutlined />
@@ -213,12 +213,6 @@ export const KioskListPage = () => {
                     bordered={false}
                   ></Input>
                 </AutoComplete>
-                {/* <div
-                  className="flex h-full items-center px-6 relative"
-                  style={{ backgroundColor: '#f8f8f8', right: '0' }}
-                >
-                  <SearchOutlined />{' '}
-                </div> */}
               </div>
             </div>
           </div>
