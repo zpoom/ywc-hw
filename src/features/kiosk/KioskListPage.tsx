@@ -15,6 +15,7 @@ import { Card } from 'components/Card'
 import { jsonAxios } from 'utils/axios'
 import { SearchOutlined, LeftOutlined } from '@ant-design/icons'
 import { insertAssetPrefix } from 'utils/const'
+import Fuse from 'fuse.js'
 
 const { Option } = Select
 
@@ -56,6 +57,7 @@ export const KioskListPage = () => {
   const [selectedProvince, setSelectedProvince] = useState('')
   const [selectedPriceRange, setSelectedPriceRange] = useState(-1)
   const [selectedSubCategory, setSelectedSubCategory] = useState('')
+  const [searchKeyword, setSearchKeyword] = useState('')
   const [openDrawer, setOpenDrawer] = useState(false)
 
   // navigator.geolocation.getCurrentPosition((position) => console.log(position))
@@ -74,6 +76,7 @@ export const KioskListPage = () => {
   }
   const handleSelectCategory = (value) => {
     setSelectedSubCategory('')
+    console.log('select', value)
     const cat = value
     setSelectedCategory(cat)
 
@@ -116,12 +119,27 @@ export const KioskListPage = () => {
     const priceRange = value
     setSelectedPriceRange(priceRange)
   }
+
+  const handleSearch = (value) => {
+    console.log('search', value)
+    if (value !== '') {
+      setSearchKeyword(value)
+      const fuse = new Fuse(dataSource.merchants, {
+        keys: ['shopNameTH'],
+        threshold: 0.5,
+      })
+      setMerchants(fuse.search(value).map((res) => res.item))
+      // fuse.search(value).map((res) => {})
+    }
+  }
   useEffect(() => {
     setMerchants(
       dataSource.merchants.filter(
         (d) =>
           (selectedCategory === '' ||
-            selectedCategory.includes(d.categoryName)) &&
+            selectedCategory.includes(d.categoryName) ||
+            selectedSubCategory === '' ||
+            selectedSubCategory === d.subcategoryName) &&
           (selectedProvince === '' ||
             selectedProvince.includes(d.addressProvinceName)) &&
           (selectedPriceRange === -1 || selectedPriceRange === d.priceLevel),
@@ -178,16 +196,29 @@ export const KioskListPage = () => {
                 <AutoComplete
                   placeholder="ค้นหา ชื่อ ร้านอาหาร และเครื่องดื่ม ร้านธงฟ้า ร้านค้า OTOP และสินค้าทั่วไป"
                   size="large"
-                  options={[{ value: 'text 1' }, { value: 'text 2' }]}
+                  options={categories.map((cat) => ({ value: cat.name }))}
                   style={{ width: '100%' }}
                   bordered={false}
-                />
-                <div
+                  onSelect={handleSelectCategory}
+                  onSearch={handleSearch}
+                  // value={selectedCategory}
+                >
+                  <Input
+                    size="large"
+                    suffix={
+                      <div className="flex h-full items-center px-6">
+                        <SearchOutlined />
+                      </div>
+                    }
+                    bordered={false}
+                  ></Input>
+                </AutoComplete>
+                {/* <div
                   className="flex h-full items-center px-6 relative"
                   style={{ backgroundColor: '#f8f8f8', right: '0' }}
                 >
                   <SearchOutlined />{' '}
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -304,17 +335,6 @@ export const KioskListPage = () => {
                   <Button block className="mt-2" type="default">
                     ตกลง
                   </Button>
-                  {/* <Select
-                    className="mt-2 w-full"
-                    onChange={handleSelectPriceRange}
-                  >
-                    <Option value={-1}>ทั้งหมด</Option>
-                    {priceRanges.map((priceRange, idx) => (
-                      <Option value={idx + 1} key={priceRange}>
-                        {priceRange}
-                      </Option>
-                    ))}
-                  </Select> */}
                 </>
               )}
               {subCategories.length > 0 && (
@@ -381,7 +401,7 @@ export const KioskListPage = () => {
         <div className="text-2xl  w-full h-16 bg-blue-900 text-white flex justify-center items-center relative">
           <div className="absolute left-0 top-auto ml-4">
             <LeftOutlined onClick={() => setOpenDrawer(false)} />
-          </div>{' '}
+          </div>
           กรอกผล
         </div>
         <div className="bg-white p-4 w-full">
@@ -389,7 +409,7 @@ export const KioskListPage = () => {
             ประเภทร้านค้า
           </div>
           <Radio.Group
-            className="mt-2"
+            className="mt-4"
             onChange={handleChangeCategory}
             value={selectedCategory}
           >
@@ -406,10 +426,14 @@ export const KioskListPage = () => {
               </Radio>
             ))}
           </Radio.Group>
-          <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
+          <div className="mt-6 first:mt-0 break-word text-base font-sans font-semibold text-black">
             จังหวัด/ใกล้ฉัน
           </div>
-          <Select className="w-full" onChange={handleSelectProvince}>
+          <Select
+            className="mt-2 w-full"
+            onChange={handleSelectProvince}
+            value={selectedProvince}
+          >
             <Option value="พื้นที่ใกล้ฉัน">พื้นที่ใกล้ฉัน</Option>
             <Option value="">สถานที่ทั้งหมด</Option>
             {provinces.map((province) => (
@@ -418,20 +442,55 @@ export const KioskListPage = () => {
               </Option>
             ))}
           </Select>
-          <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
-            ราคา
-          </div>
-          <Select className="w-full" onChange={handleSelectPriceRange}>
-            <Option value={-1}>ทั้งหมด</Option>
-            {priceRanges.map((priceRange, idx) => (
-              <Option value={idx + 1} key={priceRange}>
-                {priceRange}
-              </Option>
-            ))}
-          </Select>
+          {selectedCategory === 'ร้านอาหารและเครื่องดื่ม' ? (
+            <>
+              <div className="mt-6 first:mt-0 break-word text-base font-sans font-semibold text-black">
+                ราคา
+              </div>
+              <Select
+                className="mt-2 w-full"
+                onChange={handleSelectPriceRange}
+                value={selectedPriceRange}
+              >
+                <Option value={-1}>ทั้งหมด</Option>
+                {priceRanges.map((priceRange, idx) => (
+                  <Option value={idx + 1} key={priceRange}>
+                    {priceRange}
+                  </Option>
+                ))}
+              </Select>
+            </>
+          ) : (
+            <>
+              <div className="mt-6 first:mt-0 break-word text-base font-sans font-semibold text-black">
+                ช่วงราคาสินค้า (บาท)
+              </div>
+              <Input.Group
+                size="small"
+                className="flex items-center justify-around"
+              >
+                <InputNumber
+                  className="mt-2"
+                  style={{ flex: '1 1 0%', textAlign: 'center' }}
+                  placeholder="ราคาต่ำสุด"
+                />
+                <div className="mx-2" style={{ borderRight: '0px' }}>
+                  -
+                </div>
+                <InputNumber
+                  className="mt-2 "
+                  style={{ flex: '1 1 0%', textAlign: 'center' }}
+                  placeholder="ราคาสูงสุด"
+                />
+              </Input.Group>
+              <Button block className="mt-2" type="default">
+                ตกลง
+              </Button>
+            </>
+          )}
           {subCategories.length > 0 && (
             <>
-              <div className="mt-2 first:mt-0 break-word text-base font-sans font-semibold text-black">
+              <div className="mt-6 first:mt-0 break-word text-base font-sans font-semibold text-black">
                 ประเภทอาหารและเครื่องดื่ม
               </div>
               <Radio.Group
@@ -439,18 +498,25 @@ export const KioskListPage = () => {
                 onChange={handleChangeSubCategory}
                 value={selectedSubCategory}
               >
-                <Radio style={{ display: 'block', height: '32px' }} value="">
-                  ทั้งหมด
-                </Radio>
-                {subCategories.map((subCat: string, idx: number) => (
-                  <Radio
-                    key={idx}
-                    style={{ display: 'block', height: '32px' }}
-                    value={subCat}
-                  >
-                    {subCat}
-                  </Radio>
-                ))}
+                {subCategories.length > 0 && (
+                  <>
+                    <Radio
+                      style={{ display: 'block', height: '32px' }}
+                      value=""
+                    >
+                      ทั้งหมด
+                    </Radio>
+                    {subCategories.map((subCat: string, idx: number) => (
+                      <Radio
+                        key={idx}
+                        style={{ display: 'block', height: '32px' }}
+                        value={subCat}
+                      >
+                        {subCat}
+                      </Radio>
+                    ))}
+                  </>
+                )}
               </Radio.Group>
             </>
           )}

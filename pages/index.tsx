@@ -6,6 +6,7 @@ export default function Home() {
     <>
       <Head>
         <title>คนละครึ่ง</title>
+        <link rel="shortcut icon" href="/logo-KLK.png" />
       </Head>
       <KioskListPage />
     </>
