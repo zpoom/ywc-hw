@@ -125,7 +125,7 @@ export const KioskListPage = () => {
     if (value !== '') {
       setSelectedCategory('')
       setSelectedSubCategory('')
-      setSelectedPriceRange('')
+      setSelectedProvince('')
       setSelectedPriceRange(-1)
       setSearchKeyword(value)
       const fuse = new Fuse(dataSource.merchants, {
